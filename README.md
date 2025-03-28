@@ -1,4 +1,4 @@
-# [Project Title]
+# Snowbowl Savant
 ## Middlebury College, CSCI 701 (Senior Seminar, Spring 2025)
 
 This is your main project README which will contain instructions on how to build and run your project. You can delete and overwrite the contents of this README file at any point. We'll talk about what should be included in this file later in the semester.
@@ -14,3 +14,25 @@ This initial project template contains a few workflows (defined in `.github/work
 In general, your development workflow will be to open one (or more) Issues in any given week, write the code in the coming week, and then open and merge one (or more) PRs that address the corresponding Issue(s) from the previous week. When opening an Issue & Pull Request, please complete the relevant fields in the description (the templates are defined in the `.github` directory).
 
 Your first task is to create/review/merge a Pull Request that addresses Issue #1, which consists of creating a `CODE_OF_CONDUCT.md` file for your project.
+
+## Ethics Protocol
+
+Goal: Develop an algorithm that allows users to identify mountain ranges and peaks using their phone camera for free
+
+Point and Shoot Rational
+- Reduced unnecessary time spent on screen and devices
+- Accessible to people of all ages (not barred by confusions/hindrances of making accounts)
+- Save database storage (environmental reasons)
+
+
+#### Possible Futures:
+- **Positive**: our app is accessible to all age demographics
+- **Positive**: people get to accurately identify mountains for hiking or curiosity reasons
+- **Negative**: hidden gem hikes and mountain peaks may become more crowded
+
+#### Stakeholders:
+- iOS users
+- Android users
+- Hikers
+- Nature enthusiast
+- 
