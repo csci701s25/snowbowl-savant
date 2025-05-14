@@ -16,13 +16,13 @@ def train_model(
     Trains a binary classifier using BCE loss with an Adam optimizer.
 
     Args:
-        model_class: A torch.nn.Module class
-        input_dim: Input feature dimension
-        train_loader: DataLoader for training data
-        test_loader: DataLoader for testing data
-        epochs: Number of epochs to train
-        lr: Learning rate for optimizer
-        verbose: Whether to print progress
+        - model_class: A torch.nn.Module class
+        - input_dim: Input feature dimension
+        - train_loader: DataLoader for training data
+        - test_loader: DataLoader for testing data
+        - epochs: Number of epochs to train
+        - lr: Learning rate for optimizer
+        - verbose: Whether to print progress
     
     Returns:
         Trained model

@@ -1,0 +1,19 @@
+config  method  avg_pixel_distance  cosine_similarity  \
+6    color_ST      DP            0.900240           0.999195   
+7    color_ST  Greedy           20.653131           0.995870   
+2  color_noST      DP            0.891402           0.999195   
+3  color_noST  Greedy           10.986657           0.978704   
+4     gray_ST      DP            1.588713           0.999135   
+5     gray_ST  Greedy           32.812091           0.963148   
+0   gray_noST      DP            1.618924           0.999136   
+1   gray_noST  Greedy            8.633622           0.991637   
+
+   avg_inference_time  
+6            5.522724  
+7            0.282634  
+2            5.359985  
+3            0.277066  
+4            5.565312  
+5            0.282215  
+0            5.309818  
+1            0.258012

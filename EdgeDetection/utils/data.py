@@ -39,22 +39,31 @@ def compute_ST_map(gray, sigma=1.0) -> Tuple[np.ndarray, np.ndarray, np.ndarray]
     
     return strength, coherence, orientation
 
+import numpy as np
+import cv2
+from scipy.ndimage import binary_dilation
+from typing import Tuple
+
 def extract_labeled_dataset_from_image(
     image_rgb: np.ndarray,
     gt_image_rgb: np.ndarray,
     r: int = 3,
     ridge_margin: int = 3,
-    ST_map: np.ndarray= None,
-    image_bw: np.ndarray = None
+    ST_map: np.ndarray = None,
+    image_bw: np.ndarray = None,
+    pos_dup_factor: int = 1
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
-    Extracts features (r x r patch and/or ST values) at pixels on Canny edges and labels them as ridge or not.
+    Extracts features at pixels on Canny edges and labels them as ridge or not.
 
     Parameters:
     - image_rgb: (H, W, 3) RGB image
     - gt_image_rgb: (H, W, 3) Ground truth image with red ridge lines
     - r: radius of patch
     - ridge_margin: dilation iterations around red pixels to include as ridge
+    - ST_map: Optional structure tensor map
+    - image_bw: Optional grayscale image override
+    - pos_dup_factor: How many times to duplicate positive samples
 
     Returns:
     - features: (N, number of features) array
@@ -69,24 +78,33 @@ def extract_labeled_dataset_from_image(
     features_list, labels = [], []
     h, w = image_rgb.shape[:2]
 
-    # Use grayscale image if specified
-    if image_bw is not None:
-        image = image_bw
-    else:
-        image = image_rgb
+    image = image_bw if image_bw is not None else image_rgb
 
     for y in range(r, h - r):
         for x in range(r, w - r):
             if edges[y, x] == 0:
                 continue
 
-            features = extract_features_at_pixel(image, x, y, r=r, ST_map=ST_map) # Only use ST_map if specified
+            features = extract_features_at_pixel(image, x, y, r=r, ST_map=ST_map)
             label = int(dilated_red_mask[y, x])
 
             features_list.append(features)
             labels.append(label)
-    
-    return features_list, labels
+
+            # Duplicate positive samples
+            if label == 1 and pos_dup_factor > 1:
+                for _ in range(pos_dup_factor - 1):
+                    features_list.append(features)
+                    labels.append(label)
+
+    # Convert to arrays and shuffle
+    features_array = np.array(features_list)
+    labels_array = np.array(labels)
+
+    indices = np.arange(len(labels_array))
+    np.random.shuffle(indices)
+
+    return features_array[indices], labels_array[indices]
 
 def prepare_dataset(
     image_dir: str,
@@ -95,6 +113,7 @@ def prepare_dataset(
     use_bw: bool = False,
     use_ST: bool = False,
     ridge_margin: int = 3,
+    pos_dup_factor: int = 1,
     verbose: bool = False
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
@@ -125,7 +144,8 @@ def prepare_dataset(
             r=r,
             ridge_margin=ridge_margin,
             ST_map=ST_map,
-            image_bw=image_input
+            image_bw=image_input,
+            pos_dup_factor=pos_dup_factor
         )
 
         X_list.append(features_list)
