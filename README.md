@@ -8,7 +8,9 @@
 
 ---
 ## Examples
-If you want to run the program on test images of your own, navigate to `EdgeDetection/user_images.ipynb` and follow the instructions in the file!
+If you want to run the program on test images of your own, navigate to `EdgeDetection/user_images.ipynb` and follow the instructions in the file! If you want to replicate our results, run all the cells in `EdgeDetection/final_tets.ipynb`.
+
+> Complete "How to Use" steps before you run the files!
 
 This is an example of a generated line that was not a part of our training or testing suite, taken nearby Middlebury College:
 ![Middlebury Mountain Range with Line](/media/midd_line.png)
