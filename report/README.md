@@ -1,8 +1,6 @@
-# Snowbowl Savant
+# Snowbowl Savant - HorizonSAGE Exploring an Adaptive Greedy Approach to Skyline Detection using Neural Networks
 ## Middlebury College, CSCI 701 (Senior Seminar, Spring 2025)
 ### Aidan McMillan & Lukka Wolff
-
-# Ridge Detection for Mountain Line Recognition
 
 **Goal:** Develop an open-source ridge detection algorithm for use in mountain peak identification applications
 
