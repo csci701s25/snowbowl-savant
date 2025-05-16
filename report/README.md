@@ -24,6 +24,102 @@ Despite the extensive literature on ridge detection, there aren't many practical
 ### 5. Your Work & Significance
 Our work investigates whether a modified ridge detection algorithm can be effectively used for mountain skyline recognition, with the long-term goal of improving the accuracy of mountain labeling apps. By narrowing in on this component and releasing it openly, we aim to enable future developers to build better, more transparent, and more accurate nature-assistive tools. Specifically, we implement a novel greedy algorithm that constructs the predicted ridge line in parallel with ridge pixel classification. Our approach reduces the search space for the neural network classifier and eliminates the need for dynamic programming reconstruction.
 
+## Methodology
+
+Our approach focuses on training a lightweight ridge pixel classifier to evaluate a novel ridge-line reconstruction strategy based on greedy methods. We compare this strategy’s speed and accuracy against a traditional dynamic programming approach. Additionally, we evaluate different input feature sets, including grayscale and RGB pixel neighborhoods and structure tensor descriptors. The goal is to assess whether these models can detect mountain skylines both accurately and efficiently enough for deployment on mobile or embedded platforms.
+
+### Data Collection & Annotation
+
+We use the publicly available web dataset introduced by Ahmad et al. (IJCNN 2021), which contains 80 mountain panorama images with corresponding ground truth annotations. Each annotation is a `.bmp` image where mountain ridges are marked using pure red pixels. We manually split the dataset into 16 training images and 64 test images.
+
+To generate training labels, red pixels are treated as positive ridge samples, and all other pixels are treated as negative. Since Canny edge detection does not always align perfectly with annotated ridge pixels, we apply binary dilation to the red mask. This helps accommodate small misalignments and ensures that nearby edge pixels are still labeled as positive during training.
+
+Feature extraction is restricted to Canny edge pixels in order to reduce the negative class size and to focus the task on distinguishing ridge-line edges from non-ridge-line edges. This decision is also motivated by the dynamic programming baseline, which operates on Canny edges alone.
+
+### Feature Extraction
+
+The primary features are local pixel neighborhoods. Specifically, we extract small image patches centered around Canny edge pixels of size $7 \times 7$.
+
+To improve feature richness, we incorporate local structure tensor descriptors, inspired by the BLADE filtering framework[^4]. These are derived from the $2 \times 2$ structure tensor matrix at each pixel, smoothed using a Gaussian kernel, and decomposed into its eigenvalues and eigenvectors.
+
+From the structure tensor, we compute the following descriptors at each pixel:
+
+* **Orientation**:
+
+  $$
+  \theta = \arctan\left(\frac{w_2}{w_1}\right)
+  $$
+
+  where $\vec{w}$ is the dominant eigenvector. This indicates the dominant local gradient direction.
+
+* **Strength**:
+
+  $$
+  \text{strength} = \sqrt{\lambda_1}
+  $$
+
+  where $\lambda_1 \geq \lambda_2$ are the eigenvalues. This quantifies the magnitude of the dominant directional signal.
+
+* **Coherence**:
+
+  $$
+  \text{coherence} = \frac{\sqrt{\lambda_1} - \sqrt{\lambda_2}}{\sqrt{\lambda_1} + \sqrt{\lambda_2} + \varepsilon}
+  $$
+
+  This measures the anisotropy of the gradient, with higher values indicating a clearer directional preference.
+
+We evaluated four feature configurations:
+
+* **Gray\_noST**: Grayscale patch only
+* **Color\_noST**: RGB patch only
+* **Gray\_ST**: Grayscale patch + structure tensor features
+* **Color\_ST**: RGB patch + structure tensor features
+
+### Classifier Design and Training
+
+We use a compact fully connected neural network with a single hidden layer of 16 ReLU units and a sigmoid output unit. This architecture was chosen for its speed, interpretability, and suitability for low-power platforms. The network is trained using binary cross-entropy loss and the Adam optimizer.
+
+Training is performed on extracted feature vectors using PyTorch, over 5 epochs with a learning rate of 0.003.
+
+### Ridge Reconstruction
+
+After the classifier predicts per-pixel ridge probabilities, we reconstruct a continuous ridge-line using two methods:
+
+#### Greedy Tracking
+
+We introduce a lightweight greedy algorithm for ridge-line reconstruction that attempts to optimize for speed, making it suitable fo real-time detection on resource-constrained applications. This method integrates classification and reconstruction to minimize the number of model inferences required.
+
+Observing that ridge lines often form visually coherent paths in the probability map, we designed the algorithm to "trace" the line across the image column-by-column:
+
+1. Start by estimating the ridge height in the initial image columns.
+2. For each subsequent column, define a vertical search window of radius $r$ centered on the current ridge estimate.
+3. Evaluate ridge probabilities only within this narrow band.
+4. Select the pixel with the highest probability as the ridge point for that column.
+5. If confidence falls below a threshold, restart tracking from the first column.
+
+This approach the global cost-map computation and backtracking required by dynamic programming, and should provide significant speed advantages while maintaining sufficient accuracy. The drawback to this approach is that it makes the assumption that there are no vertical or near edges in the mountain and that the ridge-line prediction map creates a continuous-enough line. This can lead to inaccuracies in prediction especially on edge-case images.
+
+![Greedy algorithm visualization](media/greedy_visualization.png)
+
+#### Dynamic Programming
+
+As a baseline, we implemented a dynamic programming approach, commonly used for skyline detection. It formulates ridge detection as a shortest-path problem over a 2D cost map, where the cost at each pixel is:
+
+$$
+\text{cost} = -\log(p)
+$$
+
+where $p$ is the predicted ridge probability. The optimal path is traced left to right, under a vertical smoothness constraint $\delta$, which limits abrupt vertical transitions between adjacent columns.
+
+Although DP yields accurate ridge reconstructions, it is more computationally intensive due to the need to evaluate, store, and backtrack across the full cost map. Furthermore, it relies on the prediction of a cost map over the entire image, meaning each pixel must be classified. Our DP approach counteracts this issue by only classifying only Canny edges. The issue that arises here is that 
+
+### Evaluation Metrics
+
+We evaluate ridge detection performance using the following metrics:
+
+* **Average Pixel Distance**: Mean vertical deviation between the predicted ridge and the ground truth ridge.
+* **Inference Time**: Average time required to reconstruct a ridge-line across an image.
+
 ## Ethics Statement
 ### Open-Source Rational
 Conducting the research for this project, we were surprised to find no open-source code for apps like PeakFinder and limited code for mountain ridge detection. There are numerous scholarly papers on the subject that in many cases are inaccessible and or esoteric.
