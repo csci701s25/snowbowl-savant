@@ -20,15 +20,7 @@ def cosine_similarity_line(pred_line: np.ndarray, gt_line: np.ndarray) -> float:
     return 1 - cosine(pred_line, gt_line)  # Cosine similarity = 1 - cosine distance
 
 
-def evaluate_ridge_predictions(
-    image_paths: list,
-    gt_paths: list,
-    model,
-    find_ridge_fn,
-    r=3,
-    use_ST=True,
-    use_bw=True
-) -> dict:
+def evaluate_ridge_predictions(image_paths: list, gt_paths: list, model, find_ridge_fn, r=3, use_ST=True, use_bw=True) -> dict:
     """
     Evaluates ridge predictions over a dataset.
     Returns average pixel distance, cosine similarity, and avg inference time.
@@ -56,7 +48,6 @@ def evaluate_ridge_predictions(
         image_input = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) if use_bw else cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-
         if use_ST:
             ST_map = compute_ST_map(image_gray)
         else:
@@ -77,12 +68,12 @@ def evaluate_ridge_predictions(
             pred_ridge = pred_ridge[:min_len]
             gt_ridge = gt_ridge[:min_len]
 
-        # Compute metrics
+        # Calculate metrics
         results["avg_pixel_distance"].append(average_pixel_distance(pred_ridge, gt_ridge))
         results["cosine_similarity"].append(cosine_similarity_line(pred_ridge, gt_ridge))
         results["inference_times"].append(duration)
 
-    # Aggregate results
+    # Combine results
     return {
         "avg_pixel_distance": np.mean(results["avg_pixel_distance"]),
         "cosine_similarity": np.mean(results["cosine_similarity"]),

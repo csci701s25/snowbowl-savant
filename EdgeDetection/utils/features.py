@@ -1,12 +1,6 @@
 import numpy as np
 
-def extract_features_at_pixel(
-    image: np.ndarray,
-    x: int, 
-    y: int, 
-    r: int, 
-    ST_map: np.ndarray = None,
-) -> np.ndarray:
+def extract_features_at_pixel(image: np.ndarray,x: int, y: int, r: int, ST_map: np.ndarray = None,) -> np.ndarray:
     """
     Extracts features (surrounding patch and structure tensor) from an image coordinate.
 

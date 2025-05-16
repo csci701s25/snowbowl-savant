@@ -3,15 +3,8 @@ from torch.utils.data import DataLoader
 from typing import Type
 from torch import nn
 
-def train_model(
-    model_class: Type[nn.Module], 
-    input_dim: int, 
-    train_loader: DataLoader, 
-    test_loader: DataLoader, 
-    epochs: int = 25, 
-    lr: float = 0.002, 
-    verbose: bool = True
-) -> None:
+def train_model(model_class: Type[nn.Module], input_dim: int, train_loader: DataLoader, test_loader: DataLoader, epochs: int = 25, 
+                lr: float = 0.002, verbose: bool = True) -> None:
     """
     Trains a binary classifier using BCE loss with an Adam optimizer.
 
