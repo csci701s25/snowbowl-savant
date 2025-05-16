@@ -1,8 +1,21 @@
 # HorizonSAGE: Exploring an Adaptive Greedy Approach to Skyline Detection using Neural Networks
-**Horizon Structure tensor Adaptive Greedy Extraction**
-
+**Horizon S*tructure Tensor* A*daptive* G*reedy* E*xtraction***
+<!-- SPDX-License-Identifier: MIT -->
 ---
 ## Abstract
+
+-- Enter Here --
+
+---
+## Examples
+If you want to run the program on test images of your own, navigate to `EdgeDetection/user_images.ipynb` and follow the instructions in the file!
+
+This is an example of a generated line that was not a part of our training or testing suite, taken nearby Middlebury College:
+![Middlebury Mountain Range with Line](/media/midd_line.png)
+This image shows a very accurate horizon line. This was computed training on color images with structure tensor data.
+
+This is an example of an image that was in our training dataset, that performed poorly:
+![Decent line with poor detection in a region](/media/image3_line.png)
 
 ---
 ## How to Use    
@@ -65,7 +78,7 @@ snowbowl-savant/
 │  ├─ **edge_detection.ipynb**        ← Initial edge‐detection experiments  
 │  ├─ **edge_det_tensor.ipynb**       ← Exploring structure‐tensor features  
 │  ├─ **final_tests.ipynb**           ← Final evaluation & plots  
-│  ├─ data-figures/                   ← Generated plots & raw result tables  
+│  ├─ data-figures/                   ← Generated plots & raw result tables from old explorations
 │  │   ├─ `eval.png`  
 │  │   ├─ `web_dataset_evaluation.png`  
 │  │   ├─ `results.txt`  
@@ -96,18 +109,8 @@ snowbowl-savant/
 Each notebook in `EdgeDetection/` can be run in Jupyter Lab or VS Code. The `utils/` folder houses all reusable code for loading data, extracting features (incl. structure‐tensor maps), training models, and evaluating results. Pretrained checkpoints live in `models/` (*these were trained without a train-test split*), sample inputs in `test_images/`, and final output plots & CSVs in `data-figures/`.
 
 ---
-## Examples
-This is an example or a generated line that was not a part of our training or testing suite, taken nearby Middlebury College:
-![Middlebury Mountain Range with Line](/media/midd_line.png)
-This image shows a pretty accurate horizon line. This was computed training on color images with structure tensor data.
-
-This is an example of an image that was in our training dataset, that performed poorly:
-![Decent line with poor detection in a region](/media/image3_line.png)
-
-
----
 ## Acknowledgements
-- Professor Philip Caplan - Middlebury College Dept. of Computer Science
-- Professor Andrea Vaccari - Middlebury College Dept. of Computer Science
+- Professor **Philip Caplan** - Middlebury College Dept. of Computer Science
+- Professor **Andrea Vaccari** - Middlebury College Dept. of Computer Science
 
-> We employed ChatGPT as a tool to proofread and improve the readability of this text
+> We employed ChatGPT as a tool to help format, proofread, and improve the readability of this text
