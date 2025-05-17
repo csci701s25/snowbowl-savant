@@ -3,21 +3,7 @@
 <!-- SPDX-License-Identifier: MIT -->
 ---
 ## Abstract
-
--- Enter Here --
-
----
-## Examples
-If you want to run the program on test images of your own, navigate to `EdgeDetection/user_images.ipynb` and follow the instructions in the file! If you want to replicate our results, run all the cells in `EdgeDetection/final_tets.ipynb`.
-
-> Complete "How to Use" steps before you run the files!
-
-This is an example of a generated line that was not a part of our training or testing suite, taken nearby Middlebury College:
-![Middlebury Mountain Range with Line](/media/midd_line.png)
-This image shows a very accurate horizon line. This was computed training on color images with structure tensor data.
-
-This is an example of an image that was in our training dataset, that performed poorly:
-![Decent line with poor detection in a region](/media/image3_line.png)
+In mountain peak identification applications, synthetic mountain line overlays are often misaligned with live camera feeds, leading to poor user experiences. We developed a ridge detection algorithm that uses a new adaptive greedy reconstruction strategy to accurately and efficiently detect mountain ridge lines. Our approach trains a single-hidden-layer neural network on local pixel neighborhoods. Additionally, we compared adding structure tensor values to our training features and comparing training on grayscale versus RGB pixels. Our proposed greedy algorithm reconstructs continuous ridgelines by searching for high probability pixels within a small search radius in each column—essentially tracing the line from left to right. This approach avoids spending time classifying unnecessary pixels and removes the need for computationally intensive dynamic programming. Experiments on our limited dataset revealed that our method runs much faster than dynamic programming, only suffering a minimal reduction in accuracy.
 
 ---
 ## How to Use    
@@ -72,15 +58,29 @@ deactivate
 - Be sure to **not commit `.venv/`** by listing it in your `.gitignore`.
 
 ---
+## Examples
+If you want to run the program on test images of your own, navigate to `EdgeDetection/user_images.ipynb` and follow the instructions in the file! If you want to replicate our results, run all the cells in `EdgeDetection/final_tets.ipynb`.
+
+> Complete "How to Use" steps before you run the files!
+
+This is an example of a generated line that was not a part of our training or testing suite, taken nearby Middlebury College:
+![Middlebury Mountain Range with Line](/media/midd_line.png)
+This image shows a very accurate horizon line. This was computed training on color images with structure tensor data.
+
+This is an example of an image that was in our training dataset, that performed poorly:
+![Decent line with poor detection in a region](/media/image3_line.png)
+
+---
 ## File Organization
 The most important file is `EdgeDetection/final_tests.ipynb`. Open the notebook and run all the cells to replicate our results.
 
 snowbowl-savant/
+
 ├─ EdgeDetection/  
 │  ├─ **edge_detection.ipynb**        ← Initial edge‐detection experiments  
 │  ├─ **edge_det_tensor.ipynb**       ← Exploring structure‐tensor features  
 │  ├─ **final_tests.ipynb**           ← Final evaluation & plots  
-│  ├─ data-figures/                   ← Generated plots & raw result tables from old explorations
+│  ├─ data-figures/                   ← Old generated plots & raw results  
 │  │   ├─ `eval.png`  
 │  │   ├─ `web_dataset_evaluation.png`  
 │  │   ├─ `results.txt`  
@@ -101,12 +101,11 @@ snowbowl-savant/
 │  └─ web_dataset/                    ← Raw web-scraped train/test splits  
 │      ├─ train/  
 │      └─ test/  
-├─ requirements.txt                   ← Project dependencies  
-├─ .gitignore                         ← Ignored files (e.g. `.venv/`)  
+├─ requirements.txt                   ← Project dependencies   
 ├─ report/                            ← Final written report  
-│   ├─ Final Poster.pdf               ← Project Poster
-│   └─ README.md                      ← Project report: **Introduction**, **Methodology**, **Ethics Statement**, and **References**
-└─ README.md                          ← This file  
+│   ├─ Final Poster.pdf               ← Project Poster  
+│   └─ README.md                      ← Project report  
+└─ README.md                          ← This file   
 
 Each notebook in `EdgeDetection/` can be run in Jupyter Lab or VS Code. The `utils/` folder houses all reusable code for loading data, extracting features (incl. structure‐tensor maps), training models, and evaluating results. Pretrained checkpoints live in `models/` (*these were trained without a train-test split*), sample inputs in `test_images/`, and final output plots & CSVs in `data-figures/`.
 
