@@ -46,25 +46,25 @@ From the structure tensor, we compute the following descriptors at each pixel:
 
 * **Orientation**:
 
-  $$
-  \theta = \arctan\left(\frac{w_2}{w_1}\right)
-  $$
+$$
+\theta = \arctan\left(\frac{w_2}{w_1}\right)
+$$
 
   where $\vec{w}$ is the dominant eigenvector. This indicates the dominant local gradient direction.
 
 * **Strength**:
 
-  $$
-  \text{strength} = \sqrt{\lambda_1}
-  $$
+$$
+\text{strength} = \sqrt{\lambda_1}
+$$
 
   where $\lambda_1 \geq \lambda_2$ are the eigenvalues. This quantifies the magnitude of the dominant directional signal.
 
 * **Coherence**:
 
-  $$
-  \text{coherence} = \frac{\sqrt{\lambda_1} - \sqrt{\lambda_2}}{\sqrt{\lambda_1} + \sqrt{\lambda_2} + \varepsilon}
-  $$
+$$
+\text{coherence} = \frac{\sqrt{\lambda_1} - \sqrt{\lambda_2}}{\sqrt{\lambda_1} + \sqrt{\lambda_2} + \varepsilon}
+$$
 
   This measures the anisotropy of the gradient, with higher values indicating a clearer directional preference.
 
@@ -122,7 +122,7 @@ We evaluate ridge detection performance using the following metrics:
 
 ## Results
 
-We evaluated our ridge detection pipeline across four input configurations (grayscale vs. RGB, with and without structure tensor features) and two ridge construction methods (Dynamic Programming and our proposed Greedy Tracker). Performance was assessed using average vertical pixel distance and inference time in seconds. Keep in mind that our images had a height of 520 pixels.
+We evaluated our ridge detection pipeline across four input configurations (grayscale vs. RGB, with and without structure tensor features) and two ridge construction methods (Dynamic Programming and our proposed Greedy Tracer). Performance was assessed using average vertical pixel distance and inference time in seconds. Keep in mind that our images had a height of 520 pixels.
 
 | Configuration | Method | Avg. Pixel Distance   | Inference Time (s)   |
 | ------------- | ------ | --------------------- | -------------------- |
@@ -137,7 +137,7 @@ We evaluated our ridge detection pipeline across four input configurations (gray
 
 Dynamic Programming consistently produced the most accurate ridge paths, with the best performance in the color\_noST configuration (0.89 pixels error). However, this came at a significant computational cost (\~5.5 seconds per image) that would not be feasible for real time detection.
 
-In contrast, our Greedy Tracker reduced inference time by nearly 20×, running in under 0.3 seconds per image. While less accurate overall, the gray\_noST + Greedy combination achieved a reasonable trade-off (8.63 pixels error) with the fastest runtime, making it more viable for real-time or mobile applications. Based on the produced images, this higher error was produced by inaccuracies in a couple images while most images performed quite well. We hope that with better adaptive logic in the greedy algorithm and more training data (which would allow our classifier to generalize to more images), our algorithm would see significant improvements and achieve accuracies similar to that of the dynamic programming method.
+In contrast, our Greedy Tracer reduced inference time by nearly 20×, running in under 0.3 seconds per image. While less accurate overall, the gray\_noST + Greedy combination achieved a reasonable trade-off (8.63 pixels error) with the fastest runtime, making it more viable for real-time or mobile applications. Based on the produced images, this higher error was produced by inaccuracies in a couple images while most images performed quite well. We hope that with better adaptive logic in the greedy algorithm and more training data (which would allow our classifier to generalize to more images), our algorithm would see significant improvements and achieve accuracies similar to that of the dynamic programming method.
 
 ## Ethics Statement
 ### Open-Source Rational
