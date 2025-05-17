@@ -124,6 +124,10 @@ We evaluate ridge detection performance using the following metrics:
 
 We evaluated our ridge detection pipeline across four input configurations (grayscale vs. RGB, with and without structure tensor features) and two ridge construction methods (Dynamic Programming and our proposed Greedy Tracer). Performance was assessed using average vertical pixel distance and inference time in seconds. Keep in mind that our images had a height of 520 pixels.
 
+![Average Inference Time Comparison](media\InferenceTime.png)
+
+![Average Inference Time Comparison](media\PixelDistance.png)
+
 | Configuration | Method | Avg. Pixel Distance   | Inference Time (s)   |
 | ------------- | ------ | --------------------- | -------------------- |
 | gray\_noST    | DP     | 1.62                  | 5.31                 |
