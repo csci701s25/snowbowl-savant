@@ -120,6 +120,25 @@ We evaluate ridge detection performance using the following metrics:
 * **Average Pixel Distance**: Mean vertical deviation between the predicted ridge and the ground truth ridge.
 * **Inference Time**: Average time required to reconstruct a ridge-line across an image.
 
+## Results
+
+We evaluated our ridge detection pipeline across four input configurations (grayscale vs. RGB, with and without structure tensor features) and two ridge construction methods (Dynamic Programming and our proposed Greedy Tracker). Performance was assessed using average vertical pixel distance and inference time in seconds. Keep in mind that our images had a height of 520 pixels.
+
+| Configuration | Method | Avg. Pixel Distance   | Inference Time (s)   |
+| ------------- | ------ | --------------------- | -------------------- |
+| gray\_noST    | DP     | 1.62                  | 5.31                 |
+| gray\_noST    | Greedy | 8.63                  | 0.26                 |
+| color\_noST   | DP     | 0.89                  | 5.36                 |
+| color\_noST   | Greedy | 10.99                 | 0.28                 |
+| gray\_ST      | DP     | 1.59                  | 5.57                 |
+| gray\_ST      | Greedy | 32.81                 | 0.28                 |
+| color\_ST     | DP     | 0.90                  | 5.52                 |
+| color\_ST     | Greedy | 20.65                 | 0.28                 |
+
+Dynamic Programming consistently produced the most accurate ridge paths, with the best performance in the color\_noST configuration (0.89 pixels error). However, this came at a significant computational cost (\~5.5 seconds per image) that would not be feasible for real time detection.
+
+In contrast, our Greedy Tracker reduced inference time by nearly 20×, running in under 0.3 seconds per image. While less accurate overall, the gray\_noST + Greedy combination achieved a reasonable trade-off (8.63 pixels error) with the fastest runtime, making it more viable for real-time or mobile applications. Based on the produced images, this higher error was produced by inaccuracies in a couple images while most images performed quite well. We hope that with better adaptive logic in the greedy algorithm and more training data (which would allow our classifier to generalize to more images), our algorithm would see significant improvements and achieve accuracies similar to that of the dynamic programming method.
+
 ## Ethics Statement
 ### Open-Source Rational
 Conducting the research for this project, we were surprised to find no open-source code for apps like PeakFinder and limited code for mountain ridge detection. There are numerous scholarly papers on the subject that in many cases are inaccessible and or esoteric.
